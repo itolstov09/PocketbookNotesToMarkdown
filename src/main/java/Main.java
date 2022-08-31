@@ -21,19 +21,19 @@ public class Main {
 
 //        считать html файл
 //        File input = new File("./html/test.html");
-        File input = new File("./html/Pro Git.html");
+//        File input = new File("./html/Pro Git.html");
+        File input = new File("./html/sp.html");
         Document document = Jsoup.parse(input, "UTF-8");
         // извлечь название книги
         bookName = extractBookName(
             document.body().getElementsByTag("h1").text()
         );
 
-        Elements divs = document.body().getElementsByTag("div");
-
         //создаем новую директорию для изображений и заметок
         File resultDir = new File(resultFolderName);
         resultDir.mkdir();
 
+        Elements divs = document.body().getElementsByTag("div");
         for (Element div : divs) {
             if (!div.hasAttr("id")) {
                 continue;
@@ -42,34 +42,38 @@ public class Main {
             String divId = div.id();
 
             StringBuilder note = new StringBuilder();
+            // добавляем в заметку md ссылку на книгу
             note.append(String.format("[[%s]]\n\n", bookName));
-
-            Element pageNumber = div.getElementsByClass("bm-page").first();
-            if (pageNumber != null) {
-                note.append(String.format("Страница: %s\n", pageNumber.text()));
-            }
-
-            Element comment = div.getElementsByClass("bm-note").first();
-            if (comment != null) {
-                note.append(String.format("Комментарий %s\n", comment.text()));
-            }
 
             Element textDiv = div.getElementsByClass("bm-text").first();
             if (textDiv != null) {
                 String noteText = textDiv.text();
-                if (!(noteText.equals("Bookmark") || noteText.equals("Карандаш"))) {
-                    note.append(String.format("%s", noteText));
+                if ((noteText.equals("Bookmark") || noteText.equals("Карандаш"))) {
+                    continue;
                 }
+                note.append(String.format("%s\n\n", noteText));
+            }
+
+            Element comment = div.getElementsByClass("bm-note").first();
+            if (comment != null) {
+                note.append(String.format("Комментарий %s\n\n", comment.text()));
             }
 
             Element imageDiv = div.getElementsByClass("bm-image").first();
             if (imageDiv != null) {
                 String savedImageName = saveImageAndGetName(imageDiv);
-                note.append(String.format("![[%s]]", savedImageName));
+                note.append(String.format("![[%s]]\n\n", savedImageName));
             }
 
+            Element pageNumber = div.getElementsByClass("bm-page").first();
+            if (pageNumber != null) {
+                note.append(String.format("Страница: %s\n\n", pageNumber.text()));
+            }
+
+
             //Создание файла заметки
-            Path path = Paths.get(String.format("%s%s--%s.md", resultFolderName, bookName, System.currentTimeMillis()));
+//            Path path = Paths.get(String.format("%s%s--%s.md", resultFolderName, bookName, System.currentTimeMillis()));
+            Path path = Paths.get(String.format("%s%s.md", resultFolderName,  System.currentTimeMillis()));
             byte[] strToBytes = note.toString().getBytes();
             Files.write(path, strToBytes);
 
