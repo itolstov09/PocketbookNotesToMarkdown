@@ -7,6 +7,18 @@
     <groupId>groupId</groupId>
     <artifactId>pocketbookNotesParser</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
@@ -24,17 +36,17 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>test</scope>
-        </dependency>
+
+<!--        <dependency>-->
+<!--        <groupId>ch.qos.logback</groupId>-->
+<!--        <artifactId>logback-classic</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
         </dependency>
-
     </dependencies>
 
     
